@@ -8,7 +8,7 @@ contract SimpleStorage {
     uint pos;
   }
 
-  Person[] public persons;
+  Person[] private persons;
 
   function set(string memory _name,uint _age) public {
     persons.push(Person(_name,_age,persons.length));
