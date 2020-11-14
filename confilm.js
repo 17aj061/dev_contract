@@ -9,15 +9,15 @@ const jsonObject1 = JSON.parse(fs.readFileSync('./build/contracts/SimpleStorage.
 const jsonObject2 = JSON.parse(fs.readFileSync('./build/contracts/Authentication.json','utf8'));
 
 const contract_abi1 = jsonObject1.abi;
-const contract_address1 = "0x9A6F0BcD0E731B3A8F2C1aB888f4D1B9e8a0Dc06";
+const contract_address1 = "0xc37e77A5542aC74347958a6e27752c0616bD6ce6";
 
 const contract_abi2 = jsonObject2.abi;
-const contract_address2 = "0xFFB82eFFDc6e232df054d9462171C558a499799F";
+const contract_address2 = "0x5b3CA99C0673f79Fbe04eA4F314FC968e4a1256b";
 
 
 const contract = new web3.eth.Contract(contract_abi1, contract_address1);
 const contract2 = new web3.eth.Contract(contract_abi2, contract_address2);
-web3.eth.defaultAccount='0x4a393CD5175000947Fe11226A1333d63837cC863';
+web3.eth.defaultAccount='0x962086B3AcC7B02043aB3b3922280F043423d851';
 
 async function add_person(size){
     let hex = '';
@@ -72,9 +72,9 @@ async function get_person(name){
         }
     }
     endTime = performance.now(); //計測終了
-    console.log(await contract.methods.getlength().call());
+    //console.log(await contract.methods.getlength().call());
     console.log((endTime - startTime) / 1000);
-    console.log(persons);
+    //console.log(persons);
 };
 
 async function get_person_all(){
@@ -86,16 +86,18 @@ async function get_person_all(){
     console.log(persons);
 }
 
-//add_person(39);
+//add_person(100);
 //auth(web3.eth.defaultAccount);
 //get_person('alice');
 //get_person_all();
 
-/*
-for(let i = 0;i < 100;i++){
-    let start,end;
-    start = performance.now();
-    end = performance.now();
-    console.log((end - start) / 1000);
+async function runtime(){
+    for(let i = 0;i < 100;i++){
+        //let start,end;
+        //start = performance.now();
+        await get_person('alice');
+        //end = performance.now();
+        //console.log((end - start) / 1000);
+    }
 }
-*/
+//runtime();
