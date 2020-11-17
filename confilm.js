@@ -2,6 +2,7 @@ const Web3 = require('web3');
 const web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:8545'));
 const performance = require('perf_hooks').performance;
+const fetch = require('node-fetch');
 
 const fs = require('fs');
 const {soliditySha3} = require('web3-utils');
@@ -93,11 +94,23 @@ async function get_person_all(){
 
 async function runtime(){
     for(let i = 0;i < 100;i++){
-        //let start,end;
-        //start = performance.now();
-        await get_person('alice');
-        //end = performance.now();
-        //console.log((end - start) / 1000);
+        let start,end;
+        start = performance.now();
+        const response = await fetch('http://127.0.0.1:10000/send');
+        end = performance.now();
+        console.log((end - start) / 1000);
     }
 }
 //runtime();
+
+const send_mes = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:10000/send');
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
+};
+
+send_mes();
