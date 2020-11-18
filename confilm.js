@@ -10,15 +10,15 @@ const jsonObject1 = JSON.parse(fs.readFileSync('./build/contracts/SimpleStorage.
 const jsonObject2 = JSON.parse(fs.readFileSync('./build/contracts/Authentication.json','utf8'));
 
 const contract_abi1 = jsonObject1.abi;
-const contract_address1 = "0xc37e77A5542aC74347958a6e27752c0616bD6ce6";
+const contract_address1 = "0xD6D37920D099b7d45491c54eb262e411e3E5e438";
 
 const contract_abi2 = jsonObject2.abi;
-const contract_address2 = "0x5b3CA99C0673f79Fbe04eA4F314FC968e4a1256b";
+const contract_address2 = "0x742168378Bf5242B7e1a54B0B929286725F3D2c1";
 
 
 const contract = new web3.eth.Contract(contract_abi1, contract_address1);
 const contract2 = new web3.eth.Contract(contract_abi2, contract_address2);
-web3.eth.defaultAccount='0x962086B3AcC7B02043aB3b3922280F043423d851';
+web3.eth.defaultAccount='0xd39770a02f707472f495167ee8F3C8E3a6f728E5';
 
 async function add_person(size){
     let hex = '';
@@ -87,7 +87,7 @@ async function get_person_all(){
     console.log(persons);
 }
 
-//add_person(100);
+//add_person(800);
 //auth(web3.eth.defaultAccount);
 //get_person('alice');
 //get_person_all();
@@ -101,7 +101,7 @@ async function runtime(){
         console.log((end - start) / 1000);
     }
 }
-//runtime();
+runtime();
 
 const send_mes = async () => {
     try {
@@ -113,4 +113,4 @@ const send_mes = async () => {
     }
 };
 
-send_mes();
+//send_mes();
