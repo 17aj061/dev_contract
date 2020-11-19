@@ -16,13 +16,13 @@ const jsonObject2 = JSON.parse(fs.readFileSync('./build/contracts/Authentication
 const jsonObject3 = JSON.parse(fs.readFileSync('./build/contracts/FixStorage.json','utf8'));
 
 const contract_abi1 = jsonObject1.abi;
-const contract_address1 = "0x1541FF966F07Ffbf922ab261D8A3Dea788cd90F1";
+const contract_address1 = "0x5b950deeD4A9dCdEf9184F3d41f3ac57f85Ad325";
 
 const contract_abi2 = jsonObject2.abi;
-const contract_address2 = "0xf365Da42c778D3b1A45d9200865e280779Ea6C1B";
+const contract_address2 = "0xd39e69A28f87093F43b3F14b7Df5A0EAFEBaa785";
 
 const contract_abi3 = jsonObject3.abi;
-const contract_address3 = "0x34982ED2dc1490d982B200aE0F386B7745ea2792";
+const contract_address3 = "0xd50227e108618aEdF30C8DF4D0dC91Db653E0641";
 
 const contract = new web3.eth.Contract(contract_abi1, contract_address1);
 const contract2 = new web3.eth.Contract(contract_abi2, contract_address2);
@@ -33,7 +33,7 @@ app.get('/send', function(req, res){
     const getter = async () => {
       let persons = new Array();
       let person;
-      let name = 'alice';
+      let name = 'eve';
       let startTime , endTime;
       const arr_length = await contract3.methods.get_name_length(name).call();
       startTime = performance.now(); //計測開始
@@ -49,6 +49,37 @@ app.get('/send', function(req, res){
       res.send(persons);
     }
     getter();
+});
+
+app.get('/pre', function(req, res){
+  const getter = async () => {
+    let persons = new Array();
+    let person;
+    let name = 'eve';
+    let startTime , endTime;
+    const arr_length = await contract3.methods.getlength().call();
+    startTime = performance.now(); //計測開始
+    for(let i = 0; i < arr_length;i++){
+        try{
+            person = await contract3.methods.get(i, name).call()
+            if(person[0] === 'end_of_array'){
+                break;
+            }else{
+                persons.push(person);
+            }
+            i = person[2];
+        }catch(err){
+            //nothing to do
+            //when I make code in this space
+            //error is occurrence
+        }
+    }
+    endTime = performance.now(); //計測終了
+    //console.log(await contract.methods.getlength().call());
+    console.log((endTime - startTime) / 1000);
+    res.send(persons);
+  }
+  getter();
 });
 
 /*
