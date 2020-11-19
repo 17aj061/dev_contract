@@ -8,17 +8,22 @@ const fs = require('fs');
 const {soliditySha3} = require('web3-utils');
 const jsonObject1 = JSON.parse(fs.readFileSync('./build/contracts/SimpleStorage.json','utf8'));
 const jsonObject2 = JSON.parse(fs.readFileSync('./build/contracts/Authentication.json','utf8'));
+const jsonObject3 = JSON.parse(fs.readFileSync('./build/contracts/FixStorage.json','utf8'));
 
 const contract_abi1 = jsonObject1.abi;
-const contract_address1 = "0xD6D37920D099b7d45491c54eb262e411e3E5e438";
+const contract_address1 = "0x1541FF966F07Ffbf922ab261D8A3Dea788cd90F1";
 
 const contract_abi2 = jsonObject2.abi;
-const contract_address2 = "0x742168378Bf5242B7e1a54B0B929286725F3D2c1";
+const contract_address2 = "0xf365Da42c778D3b1A45d9200865e280779Ea6C1B";
 
+const contract_abi3 = jsonObject3.abi;
+const contract_address3 = "0x34982ED2dc1490d982B200aE0F386B7745ea2792";
 
 const contract = new web3.eth.Contract(contract_abi1, contract_address1);
 const contract2 = new web3.eth.Contract(contract_abi2, contract_address2);
-web3.eth.defaultAccount='0xd39770a02f707472f495167ee8F3C8E3a6f728E5';
+const contract3 = new web3.eth.Contract(contract_abi3, contract_address3);
+
+web3.eth.defaultAccount='0xf71e23a6f9Cc70b71700a2399a564BCfAB0cDfeB';
 
 async function add_person(size){
     let hex = '';
@@ -34,6 +39,24 @@ async function add_person(size){
             hex = await contract.methods.set("alice",28).send({from: web3.eth.defaultAccount,gas:3000000}).then();
         }else{
             hex = await contract.methods.set("bob",32).send({from: web3.eth.defaultAccount,gas:3000000}).then();
+        }
+        await send_tx_hash(hex.transactionHash.substr(2));
+    }
+}
+
+async function add_person_fix(size){
+    let hex = '';
+    for(let i = 0; i < size; ++i){
+        let random = Math.round(Math.random() * 4);
+        console.log(i);
+        if(random === 0){
+            hex = await contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000}).then();
+        }else if(random === 1){
+            hex = await contract3.methods.set("risa",27).send({from: web3.eth.defaultAccount,gas:3000000}).then();
+        }else if(random === 2){
+            hex = await contract3.methods.set("alice",28).send({from: web3.eth.defaultAccount,gas:3000000}).then();
+        }else{
+            hex = await contract3.methods.set("bob",32).send({from: web3.eth.defaultAccount,gas:3000000}).then();
         }
         await send_tx_hash(hex.transactionHash.substr(2));
     }
@@ -78,25 +101,46 @@ async function get_person(name){
     //console.log(persons);
 };
 
+async function get_person_fix(name){
+    let persons = new Array();
+    let person;
+    let startTime , endTime;
+    const arr_length = await contract3.methods.get_name_length(name).call();
+    startTime = performance.now(); //計測開始
+    for(let i = 0; i < arr_length;i++){
+        try{
+            person = await contract3.methods.get_using_name(i).call()
+            persons.push(person);
+        }catch(err){
+        }
+    }
+    endTime = performance.now(); //計測終了
+    //console.log(await contract.methods.getlength().call());
+    console.log((endTime - startTime) / 1000);
+    //console.log(persons);
+};
+
 async function get_person_all(){
     let persons = new Array();
-    const arr_length = await contract.methods.getlength().call();
+    const arr_length = await contract3.methods.getlength().call();
     for(let i = 0;i<arr_length;++i){
-        persons.push(await contract.methods.get_all(i).call());
+        persons.push(await contract3.methods.get_all(i).call());
     }
     console.log(persons);
 }
 
 //add_person(10);
+//add_person_fix(80);
 //auth(web3.eth.defaultAccount);
 //get_person('alice');
 //get_person_all();
+//get_person_fix(web3.eth.defaultAccount);
 
 async function runtime(){
     for(let i = 0;i < 100;i++){
         let start,end;
         start = performance.now();
-        const response = await fetch('http://127.0.0.1:10000/send');
+        const response = await fetch('http://127.0.0.1:10001/send');
         end = performance.now();
         console.log((end - start) / 1000);
     }
@@ -105,7 +149,7 @@ runtime();
 
 const send_mes = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:10000/send');
+      const response = await fetch('http://127.0.0.1:10001/send');
       const json = await response.json();
       console.log(json);
     } catch (error) {
