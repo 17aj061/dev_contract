@@ -1,6 +1,6 @@
 const Web3 = require('web3');
 const web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:8545'));
+web3.setProvider(new web3.providers.HttpProvider('http://104.215.20.130:22000'));
 const performance = require('perf_hooks').performance;
 const fetch = require('node-fetch');
 
@@ -17,13 +17,13 @@ const contract_abi2 = jsonObject2.abi;
 const contract_address2 = "0x93B2c939E2E55B237BF5e90FFA0dBD800e731562";
 
 const contract_abi3 = jsonObject3.abi;
-const contract_address3 = "0x3f366F775b24E15DC1d0b3F5A1adBc9C4D5711D2";
+const contract_address3 = "0x68a8f98181a5129ec833A2773531c0816a7Af771";
 
 const contract = new web3.eth.Contract(contract_abi1, contract_address1);
 const contract2 = new web3.eth.Contract(contract_abi2, contract_address2);
 const contract3 = new web3.eth.Contract(contract_abi3, contract_address3);
 
-web3.eth.defaultAccount='0x07006847C4aA2375f59Fdc3017388A08125782Fa';
+web3.eth.defaultAccount="0xe49a2b3ddfd9174aed0a4b2767e4e3d444d5d4c8";
 
 async function add_person_fix(size){
     let hex = '';
@@ -131,10 +131,10 @@ async function get_person_all(){
     console.log(persons);
 }
 
-//add_person_fix(100);
+//add_person_fix(1);
 //auth(web3.eth.defaultAccount);
 //get_person('eve');
-//get_person_all();
+get_person_all();
 //get_person_fix('tom');
 
 async function runtime(){
@@ -159,7 +159,7 @@ async function runtime_pre(){
 
 const send_mes = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:10001/send');
+      const response = await fetch('http://104.215.20.53:10001/send');
       const json = await response.json();
       console.log(json);
     } catch (error) {
