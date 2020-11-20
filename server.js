@@ -16,18 +16,18 @@ const jsonObject2 = JSON.parse(fs.readFileSync('./build/contracts/Authentication
 const jsonObject3 = JSON.parse(fs.readFileSync('./build/contracts/FixStorage.json','utf8'));
 
 const contract_abi1 = jsonObject1.abi;
-const contract_address1 = "0x5b950deeD4A9dCdEf9184F3d41f3ac57f85Ad325";
+const contract_address1 = "0x3bD78f10350d827216859BEC1e728175E60874e9";
 
 const contract_abi2 = jsonObject2.abi;
-const contract_address2 = "0xd39e69A28f87093F43b3F14b7Df5A0EAFEBaa785";
+const contract_address2 = "0x93B2c939E2E55B237BF5e90FFA0dBD800e731562";
 
 const contract_abi3 = jsonObject3.abi;
-const contract_address3 = "0xd50227e108618aEdF30C8DF4D0dC91Db653E0641";
+const contract_address3 = "0x3f366F775b24E15DC1d0b3F5A1adBc9C4D5711D2";
 
 const contract = new web3.eth.Contract(contract_abi1, contract_address1);
 const contract2 = new web3.eth.Contract(contract_abi2, contract_address2);
 const contract3 = new web3.eth.Contract(contract_abi3, contract_address3);
-web3.eth.defaultAccount='0xf71e23a6f9Cc70b71700a2399a564BCfAB0cDfeB';
+web3.eth.defaultAccount='0x07006847C4aA2375f59Fdc3017388A08125782Fa';
 
 app.get('/send', function(req, res){
     const getter = async () => {
