@@ -134,7 +134,7 @@ async function get_person_all(){
 //add_person_fix(1);
 //auth(web3.eth.defaultAccount);
 //get_person('eve');
-get_person_all();
+//get_person_all();
 //get_person_fix('tom');
 
 async function runtime(){
