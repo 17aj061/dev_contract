@@ -1,0 +1,34 @@
+{
+  "name": "dev_contract_pre",
+  "version": "1.0.0",
+  "description": "",
+  "main": "confilm.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "ganache-cli": "^6.12.1",
+    "node-fetch": "^2.6.1",
+    "path": "^0.12.7",
+    "truffle": "^5.1.51",
+    "web3": "^1.3.0"
+  },
+  "devDependencies": {
+    "http-errors": "^1.8.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/17aj061/dev_contract.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/17aj061/dev_contract/issues"
+  },
+  "homepage": "https://github.com/17aj061/dev_contract#readme"
+}
