@@ -49,6 +49,7 @@ app.get('/send', function(req, res){
       res.send(persons);
     }
     getter();
+    console.log('===============================');
 });
 
 app.get('/pre', function(req, res){
@@ -80,6 +81,7 @@ app.get('/pre', function(req, res){
     res.send(persons);
   }
   getter();
+  console.log('===============================');
 });
 
 /*

@@ -1,6 +1,6 @@
 const Web3 = require('web3');
 const web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider('http://104.215.20.130:22000'));
+web3.setProvider(new web3.providers.HttpProvider('http://104.215.20.53:22000'));
 const performance = require('perf_hooks').performance;
 const fetch = require('node-fetch');
 
@@ -23,14 +23,14 @@ const contract = new web3.eth.Contract(contract_abi1, contract_address1);
 const contract2 = new web3.eth.Contract(contract_abi2, contract_address2);
 const contract3 = new web3.eth.Contract(contract_abi3, contract_address3);
 
-web3.eth.defaultAccount="0xe49a2b3ddfd9174aed0a4b2767e4e3d444d5d4c8";
+web3.eth.defaultAccount="0xcb1b17bb0b43b9092003b8d899aa4f897a839c4f";
 
 async function add_person_fix(size){
     let hex = '';
     for(let i = 0; i < size; ++i){
-        let random = Math.round(Math.random() * 5);
+        let random = Math.floor(Math.random() * 5);
         //console.log(random);
-        console.log(i);
+        console.log(random);
         if(random === 0){
             hex = await contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000}).then();
         }else if(random === 1){
@@ -131,7 +131,7 @@ async function get_person_all(){
     console.log(persons);
 }
 
-//add_person_fix(1);
+//add_person_fix(900);
 //auth(web3.eth.defaultAccount);
 //get_person('eve');
 //get_person_all();
@@ -141,7 +141,7 @@ async function runtime(){
     for(let i = 0;i < 100;i++){
         let start,end;
         start = performance.now();
-        const response = await fetch('http://127.0.0.1:10001/send');
+        const response = await fetch('http://104.215.20.53:10001/send');
         end = performance.now();
         console.log((end - start) / 1000);
     }
@@ -151,7 +151,7 @@ async function runtime_pre(){
     for(let i = 0;i < 100;i++){
         let start,end;
         start = performance.now();
-        const response = await fetch('http://127.0.0.1:10001/pre');
+        const response = await fetch('http://104.215.20.53:10001/pre');
         end = performance.now();
         console.log((end - start) / 1000);
     }
@@ -166,6 +166,6 @@ const send_mes = async () => {
       console.log(error);
     }
 };
-//runtime();
+runtime();
 //runtime_pre();
 //send_mes();
