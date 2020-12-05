@@ -166,6 +166,19 @@ const send_mes = async () => {
       console.log(error);
     }
 };
+
+const set = async () => {
+    for(let i = 0;i < 100;i++){
+        let start,end;
+        start = performance.now();
+        const response = await fetch('http://104.215.20.56:10001/set');
+        end = performance.now();
+        console.log((end - start) / 1000);
+    }
+};
+
+set();
+
 //runtime();
-runtime_pre();
+//runtime_pre();
 //send_mes();

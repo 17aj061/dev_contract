@@ -84,6 +84,17 @@ app.get('/pre', function(req, res){
   console.log('===============================');
 });
 
+app.get('/set', async function(req,res){
+  let hex = '';
+  let startTime , endTime;
+  startTime = performance.now();
+  hex = await contract3.methods.set("alice",28).send({from: web3.eth.defaultAccount,gas:3000000}).then();
+  endTime = performance.now();
+  console.log((endTime - startTime) / 1000);
+  res.send(hex.transactionHash.substr(2));
+  //console.log('===============================');
+})
+
 /*
 app.use(function(req, res, next) {
   next(createError(404));

@@ -166,6 +166,27 @@ const send_mes = async () => {
       console.log(error);
     }
 };
-runtime();
+
+const set = async () => {
+    for(let i = 0;i < 10;i++){
+        let start,end;
+        start = performance.now();
+        const response = await fetch('http://104.215.20.53:10001/set');
+        end = performance.now();
+        console.log((end - start) / 1000);
+    }
+};
+
+set();
+//runtime();
 //runtime_pre();
 //send_mes();
+/*
+const code = contract3.methods.set("alice",28).encodeABI();
+console.log(code);
+web3.eth.sendTransaction({
+    data : code,
+    gas : 4500000,
+    privateFor : ["3PVD6kt7trkbBfkn8ARMwjcx/6fgf1mb6YcOPYjJwRg="]
+});
+*/
