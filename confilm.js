@@ -168,7 +168,7 @@ const send_mes = async () => {
 };
 
 const set = async () => {
-    for(let i = 0;i < 10;i++){
+    for(let i = 0;i < 100;i++){
         let start,end;
         start = performance.now();
         const response = await fetch('http://104.215.20.53:10001/set');
@@ -177,7 +177,22 @@ const set = async () => {
     }
 };
 
-set();
+const setDirectly = async () => {
+    let tmp = [];
+    let startTime,endTime;
+    for(let i = 0;i < 1000;i++){
+        startTime = performance.now();
+        tmp.push(new Promise((resolve,reject) => {
+            contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000})
+            .then(endTime = performance.now());
+            console.log((endTime - startTime) / 1000);
+        }));
+    }
+    await Promise.all(tmp).then(e => console.log(e));
+}
+
+//setDirectly();
+//set();
 //runtime();
 //runtime_pre();
 //send_mes();

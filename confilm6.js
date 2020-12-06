@@ -177,7 +177,23 @@ const set = async () => {
     }
 };
 
-set();
+const setDirectly = async () => {
+    let tmp = [];
+    let startTime,endTime;
+    for(let i = 0;i < 1000;i++){
+        startTime = performance.now();
+        tmp.push(new Promise((resolve,reject) => {
+            contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000})
+            .then(endTime = performance.now());
+            console.log((endTime - startTime) / 1000);
+        }));
+    }
+    await Promise.all(tmp).then(e => console.log(e));
+}
+
+setDirectly();
+
+//set();
 
 //runtime();
 //runtime_pre();
