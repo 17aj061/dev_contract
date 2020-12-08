@@ -23,7 +23,7 @@ const contract = new web3.eth.Contract(contract_abi1, contract_address1);
 const contract2 = new web3.eth.Contract(contract_abi2, contract_address2);
 const contract3 = new web3.eth.Contract(contract_abi3, contract_address3);
 
-web3.eth.defaultAccount="0xe49a2b3ddfd9174aed0a4b2767e4e3d444d5d4c8";
+web3.eth.defaultAccount="0xDdd820038003750a16e6e4D618b606177Ca5eed6";
 
 async function add_person_fix(size){
     let hex = '';
@@ -178,17 +178,18 @@ const set = async () => {
 };
 
 const setDirectly = async () => {
-    let tmp = [];
+    let tmp = new Array();
     let startTime,endTime;
-    for(let i = 0;i < 1000;i++){
+    for(let i = 0;i < 300;i++){
         startTime = performance.now();
-        tmp.push(new Promise((resolve,reject) => {
-            contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000})
-            .then(endTime = performance.now());
-            console.log((endTime - startTime) / 1000);
-        }));
+    
+        contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000})
+        .then(receipt => {
+            tmp.push(receipt.blockNumber);
+            const time = (performance.now() - startTime) / 1000;
+            fs.appendFileSync('./time/2.txt', time + '\n', 'utf-8');
+        });
     }
-    await Promise.all(tmp).then(e => console.log(e));
 }
 
 setDirectly();

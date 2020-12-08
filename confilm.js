@@ -178,20 +178,21 @@ const set = async () => {
 };
 
 const setDirectly = async () => {
-    let tmp = [];
+    let tmp = new Array();
     let startTime,endTime;
-    for(let i = 0;i < 1000;i++){
+    for(let i = 0;i < 300;i++){
         startTime = performance.now();
-        tmp.push(new Promise((resolve,reject) => {
-            contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000})
-            .then(endTime = performance.now());
-            console.log((endTime - startTime) / 1000);
-        }));
+    
+        contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000})
+        .then(receipt => {
+            tmp.push(receipt.blockNumber);
+            const time = (performance.now() - startTime) / 1000;
+            fs.appendFileSync('./time/1.txt', time + '\n', 'utf-8');
+        });
     }
-    await Promise.all(tmp).then(e => console.log(e));
 }
 
-//setDirectly();
+setDirectly();
 //set();
 //runtime();
 //runtime_pre();
