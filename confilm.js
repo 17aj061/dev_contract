@@ -3,9 +3,11 @@ const web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider('http://104.215.20.53:22000'));
 const performance = require('perf_hooks').performance;
 const fetch = require('node-fetch');
+const sleep = require('sleep');
 
 const fs = require('fs');
 const {soliditySha3} = require('web3-utils');
+const { SSL_OP_EPHEMERAL_RSA } = require('constants');
 const jsonObject1 = JSON.parse(fs.readFileSync('./build/contracts/SimpleStorage.json','utf8'));
 const jsonObject2 = JSON.parse(fs.readFileSync('./build/contracts/Authentication.json','utf8'));
 const jsonObject3 = JSON.parse(fs.readFileSync('./build/contracts/FixStorage.json','utf8'));
@@ -178,21 +180,73 @@ const set = async () => {
 };
 
 const setDirectly = async () => {
-    let tmp = new Array();
-    let startTime,endTime;
-    for(let i = 0;i < 300;i++){
-        startTime = performance.now();
+    let tmp = 0;
+    let beginTime;
+    let num = 1000;
+    let ave = 20;
+    const arr = gen_random(num,ave);
+    for(let i = 0;i < num;i++){
+        tmp += arr[i];
+        beginTime = performance.now();
+        fs.appendFileSync('./time/2.txt', Date.now() + '\n', 'utf-8');
+
+        let promises = new Array();
+        for(let j = 0; j < arr[i]; j++){
+            promises.push(sendTx());
+        }
+
+        Promise.all(promises).then(fs.appendFileSync('./time/1.txt', Date.now() + '\n', 'utf-8'));
+        
+        function sendTx(){
+            return new Promise(async function (resolve, reject) {
+                await contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000}).then();
+            });
+        }
+
+        //console.log((Math.floor((performance.now() - beginTime) * 1000)));
+        sleep.usleep(1000000 - (Math.floor((performance.now() - beginTime) * 1000)));
+        
+    }
+    console.log('Txs = ' + tmp);
+}
+
+const setDirectlyFromPoisson = async () => {
+    let tmp = 0;
+    let beginTime;
+    let num = 100;
+    let ave = 10;
+    const arr = gen_random(num,ave);
     
-        contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000})
-        .then(receipt => {
-            tmp.push(receipt.blockNumber);
-            const time = (performance.now() - startTime) / 1000;
-            fs.appendFileSync('./time/1.txt', time + '\n', 'utf-8');
-        });
+    for(const index in arr){
+        beginTime = Date.now();
+        await contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000}).then();
+        fs.appendFileSync('./time/1.txt', Date.now() - beginTime + '\n', 'utf-8');
+        sleep.usleep(10000 * arr[index]);    
     }
 }
 
-setDirectly();
+setDirectlyFromPoisson();
+
+function gen_random(num , ave) {
+    let num_array = new Array();
+    for (let i = 0; i < num; i++) {
+        num_array[i] = Math.floor(Math.random() * ave) + 1;
+    }
+    return num_array;
+}
+
+const subTime = () => {
+    let endTime = fs.readFileSync('./time/1.txt');
+    let startTime = fs.readFileSync('./time/2.txt');
+    let sub = endTime.toString().split('\n');
+    let sub2 = startTime.toString().split('\n');
+    for(const index in sub){
+        fs.appendFileSync('./time/3.txt',String(+sub[index] - +sub2[index]) + '\n','utf-8');
+    }
+}
+//subTime();
+//gen_random(1000);
+//setDirectly();
 //set();
 //runtime();
 //runtime_pre();

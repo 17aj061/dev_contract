@@ -3,6 +3,7 @@ const web3 = new Web3();
 web3.setProvider(new web3.providers.HttpProvider('http://104.215.20.64:22000'));
 const performance = require('perf_hooks').performance;
 const fetch = require('node-fetch');
+const sleep = require('sleep');
 
 const fs = require('fs');
 const {soliditySha3} = require('web3-utils');
@@ -192,7 +193,31 @@ const setDirectly = async () => {
     }
 }
 
-setDirectly();
+//setDirectly();
+
+const setDirectlyFromPoisson = async () => {
+    let tmp = 0;
+    let beginTime;
+    let num = 100;
+    let ave = 10;
+    const arr = gen_random(num,ave);
+    
+    for(const index in arr){
+        beginTime = Date.now();
+        await contract3.methods.set("tom",20).send({from: web3.eth.defaultAccount,gas:3000000}).then();
+        fs.appendFileSync('./time/4.txt', Date.now() - beginTime + '\n', 'utf-8');
+        sleep.usleep(10000 * arr[index]);    
+    }
+}
+
+setDirectlyFromPoisson();
+function gen_random(num , ave) {
+    let num_array = new Array();
+    for (let i = 0; i < num; i++) {
+        num_array[i] = Math.floor(Math.random() * ave) + 1;
+    }
+    return num_array;
+}
 
 //set();
 
